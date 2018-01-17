@@ -472,8 +472,9 @@ struct EAGL_egl_context* EAGLIOS_CreateContext(struct EAGL_egl_display *EAGL_dpy
     
     EAGLContext *nativeContext = nil;
     if (EAGL_ctx_shared != EGL_NO_CONTEXT) {
-        nativeContext = OWNERSHIP_AUTORELEASE([[EAGLContext alloc] initWithAPI:EAGL_conf->Config.EAGLRenderingAPI
-                                          sharegroup: EAGL_ctx->Context.nativeSharedGroup]);
+        _EAGLContext *origContext = (__bridge EAGLIOSContext *)(EAGL_ctx_shared->Context);
+        nativeContext = OWNERSHIP_AUTORELEASE([[EAGLContext alloc] initWithAPI:origContext.nativeContext.API
+                                          sharegroup: origContext.nativeContext.sharegroup]);
     }
     else {
         nativeContext = OWNERSHIP_AUTORELEASE([[EAGLContext alloc] initWithAPI:EAGL_conf->Config.EAGLRenderingAPI]);
